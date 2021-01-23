@@ -202,6 +202,7 @@ class HomeViewModel(
             super.onPostExecute(result)
             homeViewmodel!!.placeResultModelList.addAll(result!!)
             homeViewmodel!!.wheatherHistoryAdapter.updateData(homeViewmodel!!.placeResultModelList)
+            homeViewmodel!!.showEmptyDataLabel = homeViewmodel!!.placeResultModelList.size==0
         }
 
     }

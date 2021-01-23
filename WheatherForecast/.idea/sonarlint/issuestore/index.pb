@@ -9,3 +9,5 @@ A
 build.gradle,f/0/f07866736216be0ee2aba49e392191aeae700a35
 x
 Happ/src/main/java/com/example/wheatherforecast/view/home/HomeActivity.kt,0/5/05d7a9fa506ebff45f8b8f7453a1d155dbd15c11
+S
+#.idea/sonarlint/issuestore/index.pb,9/f/9fe84ebb15faf917b7def6236dba604453cc61e0

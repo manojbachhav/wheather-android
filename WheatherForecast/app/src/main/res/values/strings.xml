@@ -2,10 +2,10 @@
     <string name="app_name">Weather Forecast</string>
 
     <!-- Home Screen-->
-    <string name="home_empty_data_message">History not available.\n\nYou can search current Wheather condition\nof your favorite city using above Search feature.</string>
+    <string name="home_empty_data_message">You have not searched any city yet,\nTry now using above Search feature to get any cities weather conditions.</string>
     <string name="search_hint">Enter name of City</string>
 
-     <!-- Details Screen-->
+    <!-- Details Screen-->
     <string name="details_empty_data_message">Whether Details not available.</string>
 
     <!--Common-->
