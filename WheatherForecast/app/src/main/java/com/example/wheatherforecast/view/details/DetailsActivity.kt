@@ -5,13 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.wheatherforecast.R
 import com.example.wheatherforecast.databinding.ActivityDetailsBinding
-import com.example.wheatherforecast.viewmodel.DetailsViewModel
+import com.example.wheatherforecast.viewmodel.details.DetailsViewModel
 
 class DetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var detailsViewModel = DetailsViewModel(this)
+        var detailsViewModel =
+            DetailsViewModel(this)
         var activityDetailsBinding: ActivityDetailsBinding = DataBindingUtil.setContentView(
             this,
             R.layout.activity_details

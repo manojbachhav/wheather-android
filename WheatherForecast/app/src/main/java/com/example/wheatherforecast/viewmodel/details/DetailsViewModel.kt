@@ -1,4 +1,4 @@
-package com.example.wheatherforecast.viewmodel
+package com.example.wheatherforecast.viewmodel.details
 
 import android.content.Context
 import androidx.databinding.BaseObservable

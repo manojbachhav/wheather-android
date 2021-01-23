@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Weather Forecast</string>
+
+    <!-- Home Screen-->
     <string name="home_empty_data_message">History not available.\n\nYou can search current Wheather condition\nof your favorite city using above Search feature.</string>
+    <string name="search_hint">Enter name of City</string>
+
+     <!-- Details Screen-->
     <string name="details_empty_data_message">Whether Details not available.</string>
 
 </resources>

@@ -2,9 +2,12 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#2196F3</color>
 
+    <!--other colors-->
+    <color name="transparent">#00000000</color>
     <color name="backgroundColorPrimaryTwentyOpacity">#33008577</color>
     <color name="backgroundColorBlack">#000000</color>
+    <color name="backgroundColorWhite">#FFFFFF</color>
 
 </resources>
