@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.wheatherforecast.R
 import com.example.wheatherforecast.databinding.ActivityDetailsBinding
-import com.example.wheatherforecast.model.WheatherResultModel
-import com.example.wheatherforecast.utils.AppConstant
+import com.example.wheatherforecast.model.WheatherDataModel
+import com.example.wheatherforecast.utils.constants.AppConstant
 import com.example.wheatherforecast.viewmodel.details.DetailsViewModel
 
 class DetailsActivity : AppCompatActivity() {
@@ -20,8 +20,8 @@ class DetailsActivity : AppCompatActivity() {
             this,
             R.layout.activity_details
         )
-        var model: WheatherResultModel =
-            intent.getSerializableExtra(AppConstant.WHEATHER_RESULT_MODEL) as WheatherResultModel
+        var model: WheatherDataModel =
+            intent.getSerializableExtra(AppConstant.WHEATHER_DATA_MODEL) as WheatherDataModel
         if (model != null) {
             Toast.makeText(this, "Data Received", Toast.LENGTH_SHORT).show()
         }

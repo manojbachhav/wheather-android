@@ -1,4 +1,4 @@
-package com.example.wheatherforecast.utils
+package com.example.wheatherforecast.utils.uiutils
 
 import java.text.SimpleDateFormat
 import java.util.*

@@ -8,13 +8,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wheatherforecast.R
 import com.example.wheatherforecast.databinding.ItemWheatherHistoryBinding
-import com.example.wheatherforecast.model.WheatherResultModel
+import com.example.wheatherforecast.model.WheatherDataModel
 import com.example.wheatherforecast.viewmodel.home.WheatherHistoryItemViewModel
 
 
 class WheatherHistoryAdapter(
-    private var wheatherHistoryAdapterListener: WheatherHistoryAdapterListener,
-    var historyItemList: ArrayList<WheatherResultModel>,
+    private var wheatherHistoryListener: WheatherHistoryListener,
+    var historyItemList: ArrayList<WheatherDataModel>,
     var context: Context
 ) :
     RecyclerView.Adapter<WheatherHistoryAdapter.ViewHolder>() {
@@ -30,7 +30,7 @@ class WheatherHistoryAdapter(
         holder.setViewModel(
             WheatherHistoryItemViewModel(
                 context,
-                wheatherHistoryAdapterListener,
+                wheatherHistoryListener,
                 historyItemList[position]
             )
         )
@@ -50,7 +50,12 @@ class WheatherHistoryAdapter(
         holder.unbind()
     }
 
-    fun updateData(list: ArrayList<WheatherResultModel>) {
+    fun addData(dataItem: WheatherDataModel) {
+        historyItemList.add(dataItem)
+        notifyDataSetChanged()
+    }
+
+    fun updateData(list: ArrayList<WheatherDataModel>) {
         historyItemList = list
         notifyDataSetChanged()
     }

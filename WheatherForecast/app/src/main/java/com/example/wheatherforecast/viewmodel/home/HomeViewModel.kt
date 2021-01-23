@@ -1,6 +1,7 @@
 package com.example.wheatherforecast.viewmodel.home
 
 import android.content.Context
+import android.net.ConnectivityManager
 import android.widget.Toast
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
@@ -8,13 +9,18 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wheatherforecast.BR
 import com.example.wheatherforecast.R
+import com.example.wheatherforecast.model.WheatherDataModel
 import com.example.wheatherforecast.model.WheatherResultModel
+import com.example.wheatherforecast.model.error.ErrorResponseModel
+import com.example.wheatherforecast.network.proxy.wheather.WheatherApiProxy
+import com.example.wheatherforecast.network.utils.DataCallbackHelper
 import com.example.wheatherforecast.view.home.WheatherHistoryAdapter
-import com.example.wheatherforecast.view.home.WheatherHistoryAdapterListener
+import com.example.wheatherforecast.view.home.WheatherHistoryListener
+
 
 class HomeViewModel(
     var context: Context,
-    var wheatherHistoryAdapterListener: WheatherHistoryAdapterListener
+    var wheatherHistoryListener: WheatherHistoryListener
 ) : BaseObservable() {
 
     @Bindable
@@ -32,23 +38,17 @@ class HomeViewModel(
         }
     @Bindable
     var searchText: String? = ""
-        set(value) {
-            field = value
-            notifyPropertyChanged(BR.searchText)
-        }
 
     @Bindable
     val wheatherHistoryAdapter: WheatherHistoryAdapter
-    var wheatherResultModelList: ArrayList<WheatherResultModel> = ArrayList()
+    var wheatherDataModelList: ArrayList<WheatherDataModel> = ArrayList()
 
 
     init {
-        wheatherResultModelList.add(WheatherResultModel())
-        wheatherResultModelList.add(WheatherResultModel())
         wheatherHistoryAdapter =
             WheatherHistoryAdapter(
-                wheatherHistoryAdapterListener,
-                wheatherResultModelList,
+                wheatherHistoryListener,
+                wheatherDataModelList,
                 context
             )
         showEmptyDataLabel = false
@@ -70,11 +70,74 @@ class HomeViewModel(
     }
 
     fun onSearchButtonClicked() {
-        showMessageMessage(searchText!!)
-        //TODO:Call Wheather Stack API and navigate to details screen on success
+        wheatherHistoryListener.hideKeyboard()
+        if(searchText!!.trim().length>0){
+            checkInternetAndCallSearchAPI(searchText!!.trim())
+        }else{
+            showMessage(context.getString(R.string.search_hint))
+        }
     }
 
-    fun showMessageMessage(message: String) {
+    fun checkInternetAndCallSearchAPI(searchString: String) {
+        if (isNetworkConnected()) {
+            callSearchApi(searchString!!)
+            searchText = ""
+            notifyPropertyChanged(BR.searchText)
+        } else {
+            showMessage(context.getString(R.string.no_internet_connection))
+        }
+    }
+
+    private fun isNetworkConnected(): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo.isConnected
+
+    }
+
+    private fun callSearchApi(searchString: String) {
+        val wheatherApiProxy = WheatherApiProxy.getInstance()
+        wheatherApiProxy.searchCity(
+            context,
+            object : DataCallbackHelper<WheatherResultModel> {
+                override fun onSuccess(response: WheatherResultModel?) {
+                    if (response!!.success != null && !response!!.success!!) {
+                        var errorResponseModel = mapErrorModelToErrorResponseModel(response)
+                        showMessage(errorResponseModel!!.error!!.info!!)
+                    } else {
+                        var wheatherDataModel = mapResultModelToUiResultModel(response)
+
+                        wheatherHistoryAdapter.addData(wheatherDataModel)
+                    }
+                }
+
+                override fun onError(errorResponseModel: ErrorResponseModel?) {
+                    showMessage(errorResponseModel!!.error!!.info!!)
+                }
+            }, searchString
+        )
+    }
+
+    private fun mapErrorModelToErrorResponseModel(response: WheatherResultModel): ErrorResponseModel {
+        var errorResponseModel: ErrorResponseModel = ErrorResponseModel()
+        errorResponseModel.success = response.success
+        errorResponseModel.error = response.error
+        return errorResponseModel
+    }
+
+    private fun mapResultModelToUiResultModel(response: WheatherResultModel?): WheatherDataModel {
+        var wheatherDataModel: WheatherDataModel = WheatherDataModel()
+        wheatherDataModel.wheatherResultModel = response
+        wheatherDataModel.name = response!!.location!!.name
+        wheatherDataModel.country = response!!.location!!.country
+        wheatherDataModel.time = response!!.location!!.localtimeEpoch
+        wheatherDataModel.temp = response!!.current!!.temperature
+        wheatherDataModel.image = response!!.current!!.weatherIcons!!.get(0)
+        wheatherDataModel.status = response!!.current!!.weatherDescriptions!!.get(0)
+        return wheatherDataModel
+    }
+
+    fun showMessage(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 

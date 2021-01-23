@@ -8,16 +8,16 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.example.wheatherforecast.BR
 import com.example.wheatherforecast.R
-import com.example.wheatherforecast.model.WheatherResultModel
-import com.example.wheatherforecast.utils.AppConstant
-import com.example.wheatherforecast.utils.DateUtils
-import com.example.wheatherforecast.view.home.WheatherHistoryAdapterListener
+import com.example.wheatherforecast.model.WheatherDataModel
+import com.example.wheatherforecast.utils.constants.AppConstant
+import com.example.wheatherforecast.utils.uiutils.DateUtils
+import com.example.wheatherforecast.view.home.WheatherHistoryListener
 
 
 class WheatherHistoryItemViewModel(
     var context: Context,
-    private var wheatherHistoryAdapterListener: WheatherHistoryAdapterListener,
-    var historyItemModel: WheatherResultModel
+    private var wheatherHistoryListener: WheatherHistoryListener,
+    var historyItemModel: WheatherDataModel
 ) :
     BaseObservable() {
 
@@ -74,7 +74,7 @@ class WheatherHistoryItemViewModel(
         cityName = historyItemModel.name!!
         country = historyItemModel.country!!
         wheatherStatus = historyItemModel.status!!
-        temprature = historyItemModel.temp!!.toString()
+        temprature = historyItemModel.temp!!.toString() + context.getString(R.string.degree_symbol)
         wheatherStatusImageUrl = historyItemModel.image!!
         setTimeData()
     }
@@ -89,7 +89,7 @@ class WheatherHistoryItemViewModel(
     }
 
     fun onItemClick() {
-        wheatherHistoryAdapterListener.navigateToDetailsScreen(historyItemModel)
+        wheatherHistoryListener.navigateToDetailsScreen(historyItemModel)
     }
 
 

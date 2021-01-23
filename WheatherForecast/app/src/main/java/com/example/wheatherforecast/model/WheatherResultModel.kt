@@ -1,5 +1,6 @@
 package com.example.wheatherforecast.model
 
+import com.example.wheatherforecast.model.error.ErrorModel
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
@@ -20,28 +21,12 @@ class WheatherResultModel : Serializable {
     var current: CurrentModel? = null
 
 
-    //----------Temporary fields
-    @SerializedName("name")
+    // Error state
+    @SerializedName("success")
     @Expose
-    var name: String? = "Pune"
+    var success: Boolean? = null
 
-    @SerializedName("country")
+    @SerializedName("error")
     @Expose
-    var country: String? = "India"
-
-    @SerializedName("localtime_epoch")
-    @Expose
-    var time: Long? = 1611371100
-
-    @SerializedName("temp")
-    @Expose
-    var temp: Int? = 34
-    @SerializedName("image")
-    @Expose
-    var image: String? =
-        "https://assets.weatherstack.com//images//wsymbols01_png_64//wsymbol_0004_black_low_cloud.png"
-    @SerializedName("status")
-    @Expose
-    var status: String? = "Thunder"
-
+    var error: ErrorModel? = null
 }
