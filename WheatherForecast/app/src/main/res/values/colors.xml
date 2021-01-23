@@ -6,6 +6,8 @@
 
     <!--other colors-->
     <color name="transparent">#00000000</color>
+    <color name="backgroundColorPrimarySeventyOpacity">#B3008577</color>
+    <color name="backgroundColorPrimaryFiftyOpacity">#80008577</color>
     <color name="backgroundColorPrimaryTwentyOpacity">#33008577</color>
     <color name="backgroundColorBlack">#000000</color>
     <color name="backgroundColorWhite">#FFFFFF</color>
