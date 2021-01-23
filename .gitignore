@@ -18,8 +18,8 @@ out/
 # release/
 
 # Gradle files
-.gradle/
-build/
+WheatherForecast/.gradle/
+WheatherForecast/build/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -37,18 +37,18 @@ proguard/
 captures/
 
 # IntelliJ
-*.iml
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/gradle.xml
-.idea/assetWizardSettings.xml
-.idea/dictionaries
-.idea/libraries
+WheatherForecast/*.iml
+WheatherForecast/.idea/workspace.xml
+WheatherForecast/.idea/tasks.xml
+WheatherForecast.idea/gradle.xml
+WheatherForecast.idea/assetWizardSettings.xml
+WheatherForecast.idea/dictionaries
+WheatherForecast.idea/libraries
 # Android Studio 3 in .gitignore file.
-.idea/caches
-.idea/modules.xml
+WheatherForecast.idea/caches
+WheatherForecast.idea/modules.xml
 # Comment next line if keeping position of elements in Navigation Editor is relevant for you
-.idea/navEditor.xml
+WheatherForecast.idea/navEditor.xml
 
 # Keystore files
 # Uncomment the following lines if you do not want to check your keystore files in.
