@@ -1,0 +1,95 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+    defaultConfig {
+        applicationId "com.example.weatherforecast"
+        minSdkVersion 23
+        targetSdkVersion 29
+        versionCode Integer.parseInt(mVersionCode)
+        versionName mVersionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        release {
+            keyAlias keyAliasProduction
+            keyPassword keyAliasPasswordProduction
+            storeFile file(storeFileProduction)
+            storePassword keyPasswordProduction
+        }
+        staging {
+            keyAlias keyAliasStagging
+            keyPassword keyAliasPasswordStaging
+            storeFile file(storeFileStagging)
+            storePassword keyPasswordStagging
+        }
+        debug {
+            keyAlias keyAliasDebug
+            keyPassword keyAliasPasswordDev
+            storeFile file(storeFileDebug)
+            storePassword keyPasswordDebug
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            debuggable false
+            jniDebuggable false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BASE_URL", "\"${prodWheatherStackBaseUrl}\""
+            buildConfigField "String", "ACCESS_KEY", "\"${prodApiAccessKey}\""
+        }
+        staging {
+            minifyEnabled true
+            shrinkResources true
+            zipAlignEnabled true
+            debuggable true
+            jniDebuggable true
+            signingConfig signingConfigs.staging
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BASE_URL", "\"${stagingWheatherStackBaseUrl}\""
+            buildConfigField "String", "ACCESS_KEY", "\"${stagingApiAccessKey}\""
+        }
+        dev {
+            minifyEnabled false
+            shrinkResources false
+            zipAlignEnabled false
+            debuggable true
+            jniDebuggable true
+            signingConfig signingConfigs.debug
+            buildConfigField "String", "BASE_URL", "\"${devWheatherStackBaseUrl}\""
+            buildConfigField "String", "ACCESS_KEY", "\"${devApiAccessKey}\""
+        }
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+    dataBinding {
+        enabled = true
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+}
