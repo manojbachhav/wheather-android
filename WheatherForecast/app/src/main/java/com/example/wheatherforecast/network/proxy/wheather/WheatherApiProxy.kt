@@ -2,7 +2,7 @@ package com.example.wheatherforecast.network.proxy.wheather
 
 import android.content.Context
 import com.example.wheatherforecast.BuildConfig
-import com.example.wheatherforecast.model.WheatherResultModel
+import com.example.wheatherforecast.model.home.WheatherResultModel
 import com.example.wheatherforecast.network.proxy.wheather.helpers.WheatherApiCallHelper
 import com.example.wheatherforecast.network.proxy.wheather.helpers.WheatherProxyHelper
 import com.example.wheatherforecast.network.utils.ApiCall

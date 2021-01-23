@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.wheatherforecast.R
 import com.example.wheatherforecast.databinding.ActivityHomeBinding
-import com.example.wheatherforecast.model.WheatherDataModel
+import com.example.wheatherforecast.model.home.WheatherDataModel
 import com.example.wheatherforecast.utils.constants.AppConstant
 import com.example.wheatherforecast.view.details.DetailsActivity
 import com.example.wheatherforecast.viewmodel.home.HomeViewModel
@@ -52,6 +52,14 @@ class HomeActivity : AppCompatActivity(), WheatherHistoryListener {
                     .windowToken, InputMethodManager.HIDE_NOT_ALWAYS
             )
         }
+    }
+
+    override fun showProgressbar() {
+        ProgressDialogFragment.showProgressDialog(this)
+    }
+
+    override fun hideProgressbar() {
+        ProgressDialogFragment.hideProgressDialog(this)
     }
 
 }

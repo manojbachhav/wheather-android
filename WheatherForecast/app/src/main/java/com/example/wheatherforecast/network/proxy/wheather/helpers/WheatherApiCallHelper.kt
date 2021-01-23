@@ -1,6 +1,6 @@
 package com.example.wheatherforecast.network.proxy.wheather.helpers
 
-import com.example.wheatherforecast.model.WheatherResultModel
+import com.example.wheatherforecast.model.home.WheatherResultModel
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.HeaderMap

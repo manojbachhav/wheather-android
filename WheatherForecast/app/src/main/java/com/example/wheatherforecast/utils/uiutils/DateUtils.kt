@@ -16,6 +16,7 @@ class DateUtils private constructor() {
         fun stringFrom(milliseconds: Long, format: String): String? {
             val formatter = SimpleDateFormat(format)
             val calendar = Calendar.getInstance()
+            calendar.timeZone = TimeZone.getDefault()
             calendar.timeInMillis = milliseconds
             return formatter.format(calendar.time)
         }

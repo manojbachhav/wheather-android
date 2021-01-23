@@ -1,4 +1,4 @@
-package com.example.wheatherforecast.view.home
+package com.example.wheatherforecast.view.details
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,37 +7,35 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wheatherforecast.R
-import com.example.wheatherforecast.databinding.ItemWheatherHistoryBinding
-import com.example.wheatherforecast.model.home.WheatherDataModel
-import com.example.wheatherforecast.viewmodel.home.WheatherHistoryItemViewModel
+import com.example.wheatherforecast.databinding.ItemWeekDayBinding
+import com.example.wheatherforecast.model.details.WheatherDaysDataModel
+import com.example.wheatherforecast.viewmodel.details.WeekDaysHistoryItemViewModel
 
 
-class WheatherHistoryAdapter(
-    private var wheatherHistoryListener: WheatherHistoryListener,
-    var historyItemList: ArrayList<WheatherDataModel>,
+class WeekDaysHistoryAdapter(
+    var daysListModel: ArrayList<WheatherDaysDataModel>,
     var context: Context
 ) :
-    RecyclerView.Adapter<WheatherHistoryAdapter.ViewHolder>() {
+    RecyclerView.Adapter<WeekDaysHistoryAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_wheather_history, parent, false
+            R.layout.item_week_day, parent, false
         )
         return ViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.setViewModel(
-            WheatherHistoryItemViewModel(
+            WeekDaysHistoryItemViewModel(
                 context,
-                wheatherHistoryListener,
-                historyItemList[position]
+                daysListModel[position]
             )
         )
     }
 
     override fun getItemCount(): Int {
-        return historyItemList.size
+        return daysListModel.size
     }
 
     override fun onViewAttachedToWindow(holder: ViewHolder) {
@@ -50,19 +48,8 @@ class WheatherHistoryAdapter(
         holder.unbind()
     }
 
-    fun addData(dataItem: WheatherDataModel) {
-        historyItemList.add(0,dataItem)
-        notifyDataSetChanged()
-    }
-
-    fun updateData(list: ArrayList<WheatherDataModel>) {
-        historyItemList = list
-        notifyDataSetChanged()
-    }
-
-
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var binding: ItemWheatherHistoryBinding? = null
+        var binding: ItemWeekDayBinding? = null
 
         init {
             bind()
@@ -81,7 +68,7 @@ class WheatherHistoryAdapter(
             }
         }
 
-        fun setViewModel(viewModel: WheatherHistoryItemViewModel) {
+        fun setViewModel(viewModel: WeekDaysHistoryItemViewModel) {
             if (binding != null) {
                 binding!!.viewModel = viewModel
             }

@@ -1,4 +1,4 @@
-package com.example.wheatherforecast.model
+package com.example.wheatherforecast.model.home
 
 import com.example.wheatherforecast.model.error.ErrorModel
 import com.google.gson.annotations.Expose

@@ -8,7 +8,7 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.example.wheatherforecast.BR
 import com.example.wheatherforecast.R
-import com.example.wheatherforecast.model.WheatherDataModel
+import com.example.wheatherforecast.model.home.WheatherDataModel
 import com.example.wheatherforecast.utils.constants.AppConstant
 import com.example.wheatherforecast.utils.uiutils.DateUtils
 import com.example.wheatherforecast.view.home.WheatherHistoryListener
@@ -84,8 +84,8 @@ class WheatherHistoryItemViewModel(
             historyItemModel.time!! * 1000,
             DateUtils.TIME_FORMAT_ABBREVIATION
         )
-        time =
-            DateUtils.getFormattedDateTime(historyItemModel.time!! * 1000)!! + " at " + timeString
+        time = "On " +
+                DateUtils.getFormattedDateTime(historyItemModel.time!! * 1000)!! + " at " + timeString
     }
 
     fun onItemClick() {

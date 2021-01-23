@@ -1,7 +1,12 @@
 package com.example.wheatherforecast.viewmodel.home
 
+import android.R.id
 import android.content.Context
+import android.graphics.PorterDuff
 import android.net.ConnectivityManager
+import android.view.Gravity
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
@@ -9,9 +14,9 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wheatherforecast.BR
 import com.example.wheatherforecast.R
-import com.example.wheatherforecast.model.WheatherDataModel
-import com.example.wheatherforecast.model.WheatherResultModel
 import com.example.wheatherforecast.model.error.ErrorResponseModel
+import com.example.wheatherforecast.model.home.WheatherDataModel
+import com.example.wheatherforecast.model.home.WheatherResultModel
 import com.example.wheatherforecast.network.proxy.wheather.WheatherApiProxy
 import com.example.wheatherforecast.network.utils.DataCallbackHelper
 import com.example.wheatherforecast.view.home.WheatherHistoryAdapter
@@ -71,9 +76,10 @@ class HomeViewModel(
 
     fun onSearchButtonClicked() {
         wheatherHistoryListener.hideKeyboard()
-        if(searchText!!.trim().length>0){
+        if (searchText!!.trim().length > 0) {
+            wheatherHistoryListener.showProgressbar()
             checkInternetAndCallSearchAPI(searchText!!.trim())
-        }else{
+        } else {
             showMessage(context.getString(R.string.search_hint))
         }
     }
@@ -101,6 +107,7 @@ class HomeViewModel(
             context,
             object : DataCallbackHelper<WheatherResultModel> {
                 override fun onSuccess(response: WheatherResultModel?) {
+                    wheatherHistoryListener.hideProgressbar()
                     if (response!!.success != null && !response!!.success!!) {
                         var errorResponseModel = mapErrorModelToErrorResponseModel(response)
                         showMessage(errorResponseModel!!.error!!.info!!)
@@ -108,10 +115,12 @@ class HomeViewModel(
                         var wheatherDataModel = mapResultModelToUiResultModel(response)
 
                         wheatherHistoryAdapter.addData(wheatherDataModel)
+                        wheatherHistoryListener.navigateToDetailsScreen(wheatherDataModel)
                     }
                 }
 
                 override fun onError(errorResponseModel: ErrorResponseModel?) {
+                    wheatherHistoryListener.hideProgressbar()
                     showMessage(errorResponseModel!!.error!!.info!!)
                 }
             }, searchString
@@ -138,7 +147,14 @@ class HomeViewModel(
     }
 
     fun showMessage(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        val toast = Toast.makeText(context, message, Toast.LENGTH_SHORT)
+        val view: View = toast.view
+        view.getBackground()
+            .setColorFilter(context.getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN)
+        val text: TextView = view.findViewById(id.message)
+        text.setTextColor(context.getColor(R.color.backgroundColorWhite))
+        text.gravity = Gravity.CENTER
+        toast.show()
     }
 
 }

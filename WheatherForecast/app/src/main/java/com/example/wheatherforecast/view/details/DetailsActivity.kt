@@ -1,30 +1,44 @@
 package com.example.wheatherforecast.view.details
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.wheatherforecast.R
 import com.example.wheatherforecast.databinding.ActivityDetailsBinding
-import com.example.wheatherforecast.model.WheatherDataModel
+import com.example.wheatherforecast.model.home.WheatherDataModel
 import com.example.wheatherforecast.utils.constants.AppConstant
 import com.example.wheatherforecast.viewmodel.details.DetailsViewModel
 
 class DetailsActivity : AppCompatActivity() {
 
+    var activityDetailsBinding: ActivityDetailsBinding? = null
+    var model: WheatherDataModel? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var detailsViewModel =
-            DetailsViewModel(this)
-        var activityDetailsBinding: ActivityDetailsBinding = DataBindingUtil.setContentView(
+
+        activityDetailsBinding = DataBindingUtil.setContentView(
             this,
             R.layout.activity_details
         )
-        var model: WheatherDataModel =
+
+        getIntentData()
+        var detailsViewModel =
+            DetailsViewModel(this, model!!)
+        activityDetailsBinding!!.viewModel = detailsViewModel
+        initUi()
+    }
+
+
+    fun initUi() {
+        val layoutManager =
+            LinearLayoutManager(this)
+        activityDetailsBinding!!.recycleViewWeekDaysHistory.layoutManager = layoutManager
+    }
+
+    private fun getIntentData() {
+        model =
             intent.getSerializableExtra(AppConstant.WHEATHER_DATA_MODEL) as WheatherDataModel
-        if (model != null) {
-            Toast.makeText(this, "Data Received", Toast.LENGTH_SHORT).show()
-        }
-        activityDetailsBinding.detailsViewModel = detailsViewModel
     }
 }

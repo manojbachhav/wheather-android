@@ -1,4 +1,4 @@
-package com.example.wheatherforecast.model
+package com.example.wheatherforecast.model.home
 
 import java.io.Serializable
 
