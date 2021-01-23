@@ -4,6 +4,7 @@ import android.R.id
 import android.content.Context
 import android.graphics.PorterDuff
 import android.net.ConnectivityManager
+import android.os.AsyncTask
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
@@ -14,13 +15,17 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wheatherforecast.BR
 import com.example.wheatherforecast.R
+import com.example.wheatherforecast.database.AppDatabase
+import com.example.wheatherforecast.database.PlaceResultModelDao
 import com.example.wheatherforecast.model.error.ErrorResponseModel
-import com.example.wheatherforecast.model.home.WheatherDataModel
+import com.example.wheatherforecast.model.home.PlaceResultModel
 import com.example.wheatherforecast.model.home.WheatherResultModel
 import com.example.wheatherforecast.network.proxy.wheather.WheatherApiProxy
 import com.example.wheatherforecast.network.utils.DataCallbackHelper
 import com.example.wheatherforecast.view.home.WheatherHistoryAdapter
 import com.example.wheatherforecast.view.home.WheatherHistoryListener
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class HomeViewModel(
@@ -46,17 +51,26 @@ class HomeViewModel(
 
     @Bindable
     val wheatherHistoryAdapter: WheatherHistoryAdapter
-    var wheatherDataModelList: ArrayList<WheatherDataModel> = ArrayList()
+    var placeResultModelList: ArrayList<PlaceResultModel> = ArrayList()
 
+    var appDatabase: AppDatabase? = null
+    var placeResultModelDao: PlaceResultModelDao? = null
 
     init {
+        appDatabase = AppDatabase.getDatabase(context)
+        placeResultModelDao = appDatabase!!.placeResultModelDao()
         wheatherHistoryAdapter =
             WheatherHistoryAdapter(
                 wheatherHistoryListener,
-                wheatherDataModelList,
+                placeResultModelList,
                 context
             )
         showEmptyDataLabel = false
+    }
+
+    fun loadData() {
+        placeResultModelList.clear()
+        GetSearchHistoryAsyncTask(this).execute()
     }
 
     companion object {
@@ -112,10 +126,11 @@ class HomeViewModel(
                         var errorResponseModel = mapErrorModelToErrorResponseModel(response)
                         showMessage(errorResponseModel!!.error!!.info!!)
                     } else {
-                        var wheatherDataModel = mapResultModelToUiResultModel(response)
-
-                        wheatherHistoryAdapter.addData(wheatherDataModel)
-                        wheatherHistoryListener.navigateToDetailsScreen(wheatherDataModel)
+                        var placeResultModel = mapResultModelToUiResultModel(response)
+                        InsertSearchResultToDbAsyncTask(placeResultModelDao!!).execute(
+                            placeResultModel
+                        )
+                        wheatherHistoryListener.navigateToDetailsScreen(placeResultModel)
                     }
                 }
 
@@ -134,16 +149,19 @@ class HomeViewModel(
         return errorResponseModel
     }
 
-    private fun mapResultModelToUiResultModel(response: WheatherResultModel?): WheatherDataModel {
-        var wheatherDataModel: WheatherDataModel = WheatherDataModel()
-        wheatherDataModel.wheatherResultModel = response
-        wheatherDataModel.name = response!!.location!!.name
-        wheatherDataModel.country = response!!.location!!.country
-        wheatherDataModel.time = response!!.location!!.localtimeEpoch
-        wheatherDataModel.temp = response!!.current!!.temperature
-        wheatherDataModel.image = response!!.current!!.weatherIcons!!.get(0)
-        wheatherDataModel.status = response!!.current!!.weatherDescriptions!!.get(0)
-        return wheatherDataModel
+    private fun mapResultModelToUiResultModel(response: WheatherResultModel?): PlaceResultModel {
+        var placeResultModel: PlaceResultModel =
+            PlaceResultModel(
+                Calendar.getInstance().timeInMillis,
+                response!!.location!!.name,
+                response.location!!.country,
+                response.location!!.localtimeEpoch,
+                response.current!!.temperature,
+                response.current!!.weatherIcons!!.get(0),
+                response.current!!.weatherDescriptions!!.get(0)
+            )
+
+        return placeResultModel
     }
 
     fun showMessage(message: String) {
@@ -157,4 +175,34 @@ class HomeViewModel(
         toast.show()
     }
 
+    internal class InsertSearchResultToDbAsyncTask(var placeResultModelDao: PlaceResultModelDao) :
+        AsyncTask<PlaceResultModel?, Int?, String>() {
+        override fun doInBackground(vararg params: PlaceResultModel?): String {
+            placeResultModelDao.insert(params.get(0)!!)
+            return ""
+        }
+
+    }
+
+    internal class GetSearchHistoryAsyncTask(
+        viewmodel: HomeViewModel
+    ) : AsyncTask<Void?, Int?, List<PlaceResultModel>>() {
+
+        private var homeViewmodel: HomeViewModel? = null
+
+        init {
+            this.homeViewmodel = viewmodel!!
+        }
+
+        override fun doInBackground(vararg params: Void?): List<PlaceResultModel> {
+            return homeViewmodel!!.placeResultModelDao!!.getAll()
+        }
+
+        override fun onPostExecute(result: List<PlaceResultModel>?) {
+            super.onPostExecute(result)
+            homeViewmodel!!.placeResultModelList.addAll(result!!)
+            homeViewmodel!!.wheatherHistoryAdapter.updateData(homeViewmodel!!.placeResultModelList)
+        }
+
+    }
 }

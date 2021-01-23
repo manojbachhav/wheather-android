@@ -8,7 +8,7 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.example.wheatherforecast.BR
 import com.example.wheatherforecast.R
-import com.example.wheatherforecast.model.home.WheatherDataModel
+import com.example.wheatherforecast.model.home.PlaceResultModel
 import com.example.wheatherforecast.utils.constants.AppConstant
 import com.example.wheatherforecast.utils.uiutils.DateUtils
 import com.example.wheatherforecast.view.home.WheatherHistoryListener
@@ -17,7 +17,7 @@ import com.example.wheatherforecast.view.home.WheatherHistoryListener
 class WheatherHistoryItemViewModel(
     var context: Context,
     private var wheatherHistoryListener: WheatherHistoryListener,
-    var historyItemModel: WheatherDataModel
+    var historyItemModel: PlaceResultModel
 ) :
     BaseObservable() {
 

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.wheatherforecast.BR
 import com.example.wheatherforecast.R
 import com.example.wheatherforecast.model.details.WheatherDaysDataModel
-import com.example.wheatherforecast.model.home.WheatherDataModel
+import com.example.wheatherforecast.model.home.PlaceResultModel
 import com.example.wheatherforecast.utils.constants.AppConstant
 import com.example.wheatherforecast.utils.uiutils.DateUtils
 import com.example.wheatherforecast.view.details.WeekDaysHistoryAdapter
@@ -20,7 +20,7 @@ import kotlin.collections.ArrayList
 
 class DetailsViewModel(
     context: Context,
-    var wheatherDataModel: WheatherDataModel
+    var placeResultModel: PlaceResultModel
 ) : BaseObservable() {
 
     @Bindable
@@ -89,13 +89,13 @@ class DetailsViewModel(
     var daysListModel: ArrayList<WheatherDaysDataModel> = ArrayList()
 
     init {
-        showDetailsEmptyDataLabel = wheatherDataModel == null
-        cityName = wheatherDataModel.name!!
-        country = wheatherDataModel.country!!
-        wheatherStatus = wheatherDataModel.status!!
+        showDetailsEmptyDataLabel = placeResultModel == null
+        cityName = placeResultModel.name!!
+        country = placeResultModel.country!!
+        wheatherStatus = placeResultModel.status!!
         temprature =
-            wheatherDataModel.temp!!.toString() + context.getString(R.string.degree_symbol) + " " + wheatherDataModel.status!!
-        wheatherStatusImageUrl = wheatherDataModel.image!!
+            placeResultModel.temp!!.toString() + context.getString(R.string.degree_symbol) + " " + placeResultModel.status!!
+        wheatherStatusImageUrl = placeResultModel.image!!
         setTimeData()
 
         createCurrentAndDummyDataForWeek()
@@ -120,19 +120,19 @@ class DetailsViewModel(
 
     private fun setTimeData() {
         var timeString = DateUtils.stringFrom(
-            wheatherDataModel.time!! * 1000,
+            placeResultModel.time!! * 1000,
             DateUtils.TIME_FORMAT_ABBREVIATION
         )
         time = "On " +
-                DateUtils.getFormattedDateTime(wheatherDataModel.time!! * 1000)!! + " at " + timeString
+                DateUtils.getFormattedDateTime(placeResultModel.time!! * 1000)!! + " at " + timeString
     }
 
     private fun createCurrentAndDummyDataForWeek() {
-        var dayNumberOfWeek = getdayOfWeek(wheatherDataModel.time!!)
+        var dayNumberOfWeek = getdayOfWeek(placeResultModel.time!!)
         var wheatherDaysDataModel: WheatherDaysDataModel = WheatherDaysDataModel()
         wheatherDaysDataModel.day = getDayByIndex(dayNumberOfWeek!!)
-        wheatherDaysDataModel.temp = wheatherDataModel.temp
-        wheatherDaysDataModel.image = wheatherDataModel.image
+        wheatherDaysDataModel.temp = placeResultModel.temp
+        wheatherDaysDataModel.image = placeResultModel.image
         daysListModel.add(wheatherDaysDataModel)
         var minusDay = 0
         if (dayNumberOfWeek == 7) {

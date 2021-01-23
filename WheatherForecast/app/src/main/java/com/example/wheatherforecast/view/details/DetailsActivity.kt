@@ -6,14 +6,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.wheatherforecast.R
 import com.example.wheatherforecast.databinding.ActivityDetailsBinding
-import com.example.wheatherforecast.model.home.WheatherDataModel
+import com.example.wheatherforecast.model.home.PlaceResultModel
 import com.example.wheatherforecast.utils.constants.AppConstant
 import com.example.wheatherforecast.viewmodel.details.DetailsViewModel
 
 class DetailsActivity : AppCompatActivity() {
 
     var activityDetailsBinding: ActivityDetailsBinding? = null
-    var model: WheatherDataModel? = null
+    var model: PlaceResultModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +39,6 @@ class DetailsActivity : AppCompatActivity() {
 
     private fun getIntentData() {
         model =
-            intent.getSerializableExtra(AppConstant.WHEATHER_DATA_MODEL) as WheatherDataModel
+            intent.getSerializableExtra(AppConstant.WHEATHER_DATA_MODEL) as PlaceResultModel
     }
 }

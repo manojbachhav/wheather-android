@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.wheatherforecast.R
 import com.example.wheatherforecast.databinding.ActivityHomeBinding
-import com.example.wheatherforecast.model.home.WheatherDataModel
+import com.example.wheatherforecast.model.home.PlaceResultModel
 import com.example.wheatherforecast.utils.constants.AppConstant
 import com.example.wheatherforecast.view.details.DetailsActivity
 import com.example.wheatherforecast.viewmodel.home.HomeViewModel
@@ -37,9 +37,14 @@ class HomeActivity : AppCompatActivity(), WheatherHistoryListener {
         activityHomeBinding!!.recycleViewWheatherHistory.layoutManager = layoutManager
     }
 
-    override fun navigateToDetailsScreen(wheatherDataModel: WheatherDataModel) {
+    override fun onResume() {
+        super.onResume()
+        homeViewModel!!.loadData()
+    }
+
+    override fun navigateToDetailsScreen(placeResultModel: PlaceResultModel) {
         val intent = Intent(this, DetailsActivity::class.java)
-        intent.putExtra(AppConstant.WHEATHER_DATA_MODEL, wheatherDataModel)
+        intent.putExtra(AppConstant.WHEATHER_DATA_MODEL, placeResultModel)
         startActivity(intent)
     }
 
@@ -61,5 +66,6 @@ class HomeActivity : AppCompatActivity(), WheatherHistoryListener {
     override fun hideProgressbar() {
         ProgressDialogFragment.hideProgressDialog(this)
     }
+
 
 }
